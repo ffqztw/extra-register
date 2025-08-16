@@ -2,84 +2,305 @@
 <html lang="th">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EXTRA REGISTER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>EXTRA REGISTER – เพื่อนรัก(ส์) โปรดักชัน</title>
+  <meta name="color-scheme" content="light">
+  <!--
+    iOS-like, Yellow/Black theme, mobile-first.
+    ✅ POSTs directly to Google Forms formResponse in a hidden iframe (no Google confirmation page)
+    ✅ Pairs: (TH/EN) First & Last on same line for phone
+    ✅ Query-string prefill + optional autosubmit (?autosubmit=1)
+
+    TODO: set these two in the CONFIG block below:
+      1) GOOGLE_FORM_ACTION  → your formResponse URL
+      2) ENTRY.entry_*       → each question's entry.######## id
+
+    Optional: place your logo file at ./logo.png or update the <img src> accordingly.
+  -->
   <style>
-    body { font-family: system-ui, sans-serif; background:#f7f7fb; color:#333; margin:0; padding:20px; }
-    .container { max-width:800px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
-    h1 { text-align:center; font-size:28px; color:#444; margin-bottom:20px; }
-    label { display:block; margin:12px 0 4px; font-weight:600; }
-    input, select { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:15px; }
-    button { margin-top:20px; padding:12px; background:#a0d8ef; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; width:100%; }
-    button:hover { background:#90cde5; }
+    /* ====== THEME (Yellow / Black) ====== */
+    :root{
+      --bg: #0b0b0c;                 /* deep black background */
+      --card: #111214;               /* card black */
+      --ink: #F8F8F8;                /* primary text */
+      --ink-muted: #c7c7cc;          /* iOS secondary */
+      --accent: #ffd21e;             /* yellow brand */
+      --accent-2: #ffef9f;           /* soft yellow */
+      --stroke: #2a2a2e;             /* iOS separator */
+      --focus: rgba(255, 210, 30, .36);
+      --radius-xl: 22px;
+      --radius: 14px;
+      --shadow: 0 8px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+
+    html,body{height:100%}
+    body{
+      margin:0; background: radial-gradient(80svh 80svh at 120% -10%, rgba(255,210,30,.12), transparent 40%),
+                                 radial-gradient(100svh 100svh at -10% 120%, rgba(255,210,30,.08), transparent 40%),
+                                 var(--bg);
+      color:var(--ink);
+      font:16px/1.45 ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "TH Sarabun New", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      display:grid; place-items:center; padding: clamp(12px, 2.5vw, 24px);
+    }
+
+    .shell{ width:min(100%, 560px); }
+
+    header{
+      display:flex; align-items:center; gap:12px; margin-bottom:12px;
+    }
+    .logo{ width:48px; height:48px; flex:0 0 auto; border-radius:50%; background:#1c1c1e; display:grid; place-items:center; overflow:hidden; }
+    .logo img{ width:100%; height:100%; object-fit:cover; }
+    .title-wrap{ display:grid; gap:2px; }
+    h1{ margin:0; font-weight:800; font-size: clamp(18px, 4.5vw, 22px); letter-spacing:.2px; }
+    .subtitle{ margin:0; color:var(--ink-muted); font-size:13px; }
+
+    .card{
+      background:linear-gradient(180deg, #141416 0%, #0f0f11 100%);
+      border:1px solid var(--stroke); border-radius: var(--radius-xl); box-shadow: var(--shadow);
+      padding: clamp(14px, 4.5vw, 22px);
+    }
+
+    /* iOS form grouping */
+    .group{ border:1px solid var(--stroke); border-radius:18px; overflow:hidden; background:#0c0c0e; }
+    .row{ display:grid; grid-template-columns:1fr; gap:6px; padding:14px 14px; }
+    .row + .row{ border-top:1px solid var(--stroke); }
+    @media (min-width:460px){
+      .pair{ grid-template-columns:1fr 1fr; gap:10px; }
+    }
+
+    label{ font-size:12px; color:var(--ink-muted); letter-spacing:.2px; }
+
+    input[type="text"], select{
+      width:100%;
+      color:var(--ink);
+      background:#121214;
+      border:1px solid #1e1f23;
+      border-radius:12px;
+      padding:12px 14px; font-size:16px;
+      outline:none; transition: box-shadow .2s, border-color .2s, background .2s;
+    }
+    input::placeholder{ color:#7a7a80; opacity:.9; }
+    input:focus, select:focus{ box-shadow:0 0 0 6px var(--focus); border-color:var(--accent); background:#151518; }
+
+    /* Custom select chevron */
+    .select-wrap{ position:relative; }
+    .select-wrap::after{
+      content:""; position:absolute; right:12px; top:50%; translate:0 -50%;
+      width:10px; height:10px; pointer-events:none;
+      mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M7 10l5 5 5-5z"/></svg>') center/contain no-repeat; background:#bbb;
+    }
+    .select-wrap select{ appearance:none; padding-right:34px; }
+
+    .hint{ font-size:12px; color:#9e9ea4; margin-top:6px; }
+
+    .actions{ display:flex; gap:10px; margin-top:16px; }
+    .btn{ appearance:none; border:0; cursor:pointer; font-weight:800; letter-spacing:.2px; padding:12px 16px; border-radius:14px; }
+    .btn-primary{ background:linear-gradient(180deg, var(--accent) 0%, #ffc607 100%); color:#121212; box-shadow:0 8px 30px rgba(255,210,30,.35); }
+    .btn-secondary{ background:#1b1b1e; color:#e5e5ea; border:1px solid var(--stroke); }
+    .btn[disabled]{ opacity:.7; cursor:progress; }
+
+    .status{ display:none; margin-top:12px; padding:12px 14px; border-radius:12px; border:1px solid #2a2a2e; background:#101012; color:#d1d1d6; }
+    .status.ok{ border-color:#2f3; color:#dfff9f; background:rgba(47,255,127,.06); }
+    .status.err{ border-color:#f33; color:#ffb3b3; background:rgba(255,51,51,.06); }
+
+    footer{ margin-top:12px; text-align:center; color:var(--ink-muted); font-size:12px; }
   </style>
-</head>
-<body>
-  <div class="container">
-    <h1>EXTRA REGISTER</h1>
-    <form id="gform" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
-      <label>รหัสประจำตัว</label>
-      <input type="text" name="entry.STUDENTID" pattern="^0\d{5}$" maxlength="6" required placeholder="เช่น 012345">
-
-      <label>ชื่อจริง (ภาษาไทย)</label>
-      <input type="text" name="entry.TH_FIRST" required>
-
-      <label>นามสกุล (ภาษาไทย)</label>
-      <input type="text" name="entry.TH_LAST" required>
-
-      <label>ชื่อจริง (ภาษาอังกฤษ)</label>
-      <input type="text" name="entry.EN_FIRST" required>
-
-      <label>นามสกุล (ภาษาอังกฤษ)</label>
-      <input type="text" name="entry.EN_LAST" required>
-
-      <label>ชื่อเล่น (ภาษาไทย)</label>
-      <input type="text" name="entry.NICK_TH" required>
-
-      <label>ชื่อเล่น (ภาษาอังกฤษ)</label>
-      <input type="text" name="entry.NICK_EN" required>
-
-      <label>อายุ (ขวบ)</label>
-      <select name="entry.AGE" required>
-        <option value="">เลือกอายุ</option>
-        <option>12</option><option>13</option><option>14</option><option>15</option>
-        <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-      </select>
-
-      <label>วิชาเอก</label>
-      <select name="entry.MAJOR" required>
-        <option value="">เลือกวิชาเอก</option>
-        <option>AD</option><option>AE</option><option>AI</option><option>AN</option>
-        <option>BE</option><option>BM</option><option>CE</option><option>CH</option>
-        <option>CO</option><option>DA</option><option>DE</option><option>DF</option>
-        <option>DM</option><option>DS</option><option>EA</option><option>EE</option>
-        <option>EN1</option><option>EN2</option><option>FC</option><option>FD</option>
-        <option>FE</option><option>FH</option><option>FM</option><option>FR</option>
-        <option>GB</option><option>GH1</option><option>GH2</option><option>GI</option>
-        <option>GM</option><option>HA</option><option>HC</option><option>HS</option>
-        <option>HT</option><option>IM</option><option>IN</option><option>IN1</option><option>IN2</option>
-        <option>JA</option><option>JD</option><option>KO</option><option>LA</option>
-        <option>MA</option><option>MD</option><option>ME</option><option>ME1</option><option>ME2</option>
-        <option>MS</option><option>MU</option><option>PA</option><option>PE</option>
-        <option>PS</option><option>RL</option><option>SA</option><option>SE</option>
-        <option>SG</option><option>SO</option><option>TA</option><option>TC</option><option>TL</option>
-        <option>Tri-LM</option><option>Tri-SC</option><option>VA</option><option>VM</option>
-      </select>
-
-      <button type="submit">ส่งข้อมูล</button>
-    </form>
-
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-  </div>
 
   <script>
-    const form = document.getElementById('gform');
-    form.action = "https://docs.google.com/forms/d/e/FORM_ID/formResponse"; // replace FORM_ID with real one
-    let submitted = false;
-    form.addEventListener("submit", function(){
-      alert("ส่งข้อมูลเรียบร้อยแล้ว");
-      form.reset();
+    // ====== 1) CONFIG: Google Form endpoint + entry IDs ======
+    const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScqdngHLoxqb2fc-XJ7LME18t1-wSgKtrhjePhCZo41zI_Dlw/formResponse"; // e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
+
+    const ENTRY = {
+      studentId: "entry.1034949448", // รหัสประจำตัว (ต้องเป็น 0xxxxx)
+      thFirst:   "entry.2042823635", // ชื่อจริง (ไทย)
+      thLast:    "entry.457423116",  // นามสกุล (ไทย)
+      enFirst:   "entry.758704396",  // ชื่อจริง (อังกฤษ)
+      enLast:    "entry.506182277",  // นามสกุล (อังกฤษ)
+      nickTh:    "entry.502055474",  // ชื่อเล่น (ไทย)
+      nickEn:    "entry.476725428",  // ชื่อเล่น (อังกฤษ)
+      age:       "entry.419484256",  // อายุ (ขวบ)
+      major:     "entry.1294393685"  // วิชาเอก
+    };
+
+    // Optional prefill mapping
+    const URL_KEYS = { sid:'studentId', thFirst:'thFirst', thLast:'thLast', enFirst:'enFirst', enLast:'enLast', nickTh:'nickTh', nickEn:'nickEn', age:'age', major:'major' };
+    const qs = new URLSearchParams(location.search);
+    const q = (k)=> qs.get(k);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('gform');
+      const statusBox = document.getElementById('status');
+      const submitBtn = document.getElementById('submitBtn');
+      const hiddenFrame = document.getElementById('hidden_iframe');
+
+      // Attach Google entry names
+      for (const [key, entry] of Object.entries(ENTRY)){
+        const el = document.querySelector(`[data-field="${key}"]`);
+        if (el) el.setAttribute('name', entry);
+      }
+
+      // Endpoint & tokens
+      form.action = GOOGLE_FORM_ACTION;
+      form.elements['fvv'].value = '1';
+      form.elements['fbzx'].value = Math.random().toString(36).slice(2);
+      form.elements['pageHistory'].value = '0';
+
+      // Prefill from query
+      for (const [k, field] of Object.entries(URL_KEYS)){
+        const v = q(k);
+        if (v!=null && v!==''){
+          const el = document.querySelector(`[data-field="${field}"]`);
+          if (!el) continue;
+          if (el.tagName==='SELECT') {
+            if ([...el.options].some(o=>o.value===v)) el.value = v;
+          } else { el.value = v; }
+        }
+      }
+
+      if (q('autosubmit')==='1' && form.checkValidity()) form.requestSubmit();
+
+      function setStatus(msg, ok){
+        statusBox.textContent = msg;
+        statusBox.className = 'status ' + (ok===true ? 'ok' : ok===false ? 'err' : '');
+        statusBox.style.display = 'block';
+      }
+
+      form.addEventListener('submit', (e)=>{
+        if (!form.checkValidity()) { e.preventDefault(); form.reportValidity(); return; }
+        if (!GOOGLE_FORM_ACTION.includes('/formResponse')){ e.preventDefault(); setStatus('ยังไม่ได้ตั้งค่า GOOGLE_FORM_ACTION', false); return; }
+        for (const v of Object.values(ENTRY)){ if (!/^entry\./.test(v)){ e.preventDefault(); setStatus('ยังไม่ได้ตั้งค่า entry ID ให้ครบทุกข้อ', false); return; } }
+
+        submitBtn.disabled = true; setStatus('กำลังส่งข้อมูล...');
+        const once = () => { setStatus('ส่งข้อมูลสำเร็จ! บันทึกลง Google Sheets เรียบร้อย ✅', true); submitBtn.disabled=false; form.reset(); hiddenFrame.removeEventListener('load', once); };
+        hiddenFrame.addEventListener('load', once);
+      });
     });
   </script>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="logo"><img src="logo.png" alt="เพื่อนรัก(ส์) โปรดักชัน" /></div>
+      <div class="title-wrap">
+        <h1>EXTRA REGISTER</h1>
+        <p class="subtitle">เพื่อนรัก(ส์) โปรดักชัน • กรอกบนมือถือได้ลื่นเหมือน iOS</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <!-- Hidden IFRAME to suppress Google confirmation page -->
+      <iframe name="hidden_iframe" id="hidden_iframe" style="display:none"></iframe>
+
+      <form id="gform" method="POST" target="hidden_iframe" action="" novalidate>
+        <input type="hidden" name="fvv" value="1" />
+        <input type="hidden" name="fbzx" value="" />
+        <input type="hidden" name="pageHistory" value="0" />
+
+        <!-- GROUP: Student ID -->
+        <div class="group" role="group" aria-labelledby="g-id">
+          <div class="row">
+            <label id="g-id" for="studentId">รหัสประจำตัว *</label>
+            <input id="studentId" data-field="studentId" type="text" inputmode="numeric" maxlength="6"
+                   placeholder="เช่น 012345" pattern="^0\d{5}$" required
+                   title="กรอกรหัส 6 หลัก โดยหลักแรกต้องเป็น 0 (เช่น 012345)">
+            <div class="hint">ต้องเริ่มต้นด้วยเลข 0 และมีทั้งหมด 6 หลัก</div>
+          </div>
+        </div>
+
+        <!-- GROUP: Thai Name (First/Last in one line) -->
+        <div class="group" style="margin-top:12px" role="group" aria-labelledby="g-thname">
+          <div class="row pair">
+            <div>
+              <label for="thFirst">ชื่อจริง (ภาษาไทย) *</label>
+              <input id="thFirst" data-field="thFirst" type="text" required
+                     inputmode="text" pattern="^[\u0E00-\u0E7F\s]+$" title="ใช้ตัวอักษรไทยเท่านั้น">
+            </div>
+            <div>
+              <label for="thLast">นามสกุล (ภาษาไทย) *</label>
+              <input id="thLast" data-field="thLast" type="text" required
+                     inputmode="text" pattern="^[\u0E00-\u0E7F\s]+$" title="ใช้ตัวอักษรไทยเท่านั้น">
+            </div>
+          </div>
+        </div>
+
+        <!-- GROUP: English Name (First/Last in one line) -->
+        <div class="group" style="margin-top:12px" role="group" aria-labelledby="g-enname">
+          <div class="row pair">
+            <div>
+              <label for="enFirst">ชื่อจริง (ภาษาอังกฤษ) *</label>
+              <input id="enFirst" data-field="enFirst" type="text" required
+                     inputmode="text" pattern="^[A-Za-z\s]+$" title="English letters only">
+            </div>
+            <div>
+              <label for="enLast">นามสกุล (ภาษาอังกฤษ) *</label>
+              <input id="enLast" data-field="enLast" type="text" required
+                     inputmode="text" pattern="^[A-Za-z\s]+$" title="English letters only">
+            </div>
+          </div>
+        </div>
+
+        <!-- GROUP: Nickname (TH/EN same line) -->
+        <div class="group" style="margin-top:12px" role="group" aria-labelledby="g-nick">
+          <div class="row pair">
+            <div>
+              <label for="nickTh">ชื่อเล่น (ภาษาไทย) *</label>
+              <input id="nickTh" data-field="nickTh" type="text" required
+                     pattern="^[\u0E00-\u0E7F\s]+$" title="ใช้ตัวอักษรไทยเท่านั้น">
+            </div>
+            <div>
+              <label for="nickEn">ชื่อเล่น (ภาษาอังกฤษ) *</label>
+              <input id="nickEn" data-field="nickEn" type="text" required
+                     pattern="^[A-Za-z\s]+$" title="English letters only">
+            </div>
+          </div>
+        </div>
+
+        <!-- GROUP: Age & Major (refined selects) -->
+        <div class="group" style="margin-top:12px" role="group" aria-labelledby="g-meta">
+          <div class="row pair">
+            <div class="select-wrap">
+              <label for="age">อายุ (ขวบ) *</label>
+              <select id="age" data-field="age" required>
+                <option value="" disabled selected>เลือกอายุ</option>
+                <option>12</option><option>13</option><option>14</option><option>15</option>
+                <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+              </select>
+            </div>
+            <div class="select-wrap">
+              <label for="major">วิชาเอก *</label>
+              <select id="major" data-field="major" required>
+                <option value="" disabled selected>เลือกวิชาเอก</option>
+                <option>AD</option><option>AE</option><option>AI</option><option>AN</option>
+                <option>BE</option><option>BM</option><option>CE</option><option>CH</option>
+                <option>CO</option><option>DA</option><option>DE</option><option>DF</option>
+                <option>DM</option><option>DS</option><option>EA</option><option>EE</option>
+                <option>EN1</option><option>EN2</option><option>FC</option><option>FD</option>
+                <option>FE</option><option>FH</option><option>FM</option><option>FR</option>
+                <option>GB</option><option>GH1</option><option>GH2</option><option>GI</option>
+                <option>GM</option><option>HA</option><option>HC</option><option>HS</option>
+                <option>HT</option><option>IM</option><option>IN</option><option>IN1</option><option>IN2</option>
+                <option>JA</option><option>JD</option><option>KO</option><option>LA</option>
+                <option>MA</option><option>MD</option><option>ME</option><option>ME1</option><option>ME2</option>
+                <option>MS</option><option>MU</option><option>PA</option><option>PE</option>
+                <option>PS</option><option>RL</option><option>SA</option><option>SE</option>
+                <option>SG</option><option>SO</option><option>TA</option><option>TC</option><option>TL</option>
+                <option>Tri-LM</option><option>Tri-SC</option><option>VA</option><option>VM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn" type="submit" class="btn btn-primary">ส่งแบบฟอร์ม</button>
+          <button type="reset" class="btn btn-secondary">ล้างข้อมูล</button>
+        </div>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <footer>ข้อมูลถูกส่งเข้า Google Sheets ผ่าน Google Form โดยอัตโนมัติ • Theme: Yellow × Black iOS</footer>
+  </div>
 </body>
 </html>
