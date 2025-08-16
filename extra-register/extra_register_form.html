@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EXTRA REGISTER</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background:#f7f7fb; color:#333; margin:0; padding:20px; }
+    .container { max-width:800px; margin:0 auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+    h1 { text-align:center; font-size:28px; color:#444; margin-bottom:20px; }
+    label { display:block; margin:12px 0 4px; font-weight:600; }
+    input, select { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:15px; }
+    button { margin-top:20px; padding:12px; background:#a0d8ef; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; width:100%; }
+    button:hover { background:#90cde5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>EXTRA REGISTER</h1>
+    <form id="gform" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+      <label>รหัสประจำตัว</label>
+      <input type="text" name="entry.STUDENTID" pattern="^0\d{5}$" maxlength="6" required placeholder="เช่น 012345">
+
+      <label>ชื่อจริง (ภาษาไทย)</label>
+      <input type="text" name="entry.TH_FIRST" required>
+
+      <label>นามสกุล (ภาษาไทย)</label>
+      <input type="text" name="entry.TH_LAST" required>
+
+      <label>ชื่อจริง (ภาษาอังกฤษ)</label>
+      <input type="text" name="entry.EN_FIRST" required>
+
+      <label>นามสกุล (ภาษาอังกฤษ)</label>
+      <input type="text" name="entry.EN_LAST" required>
+
+      <label>ชื่อเล่น (ภาษาไทย)</label>
+      <input type="text" name="entry.NICK_TH" required>
+
+      <label>ชื่อเล่น (ภาษาอังกฤษ)</label>
+      <input type="text" name="entry.NICK_EN" required>
+
+      <label>อายุ (ขวบ)</label>
+      <select name="entry.AGE" required>
+        <option value="">เลือกอายุ</option>
+        <option>12</option><option>13</option><option>14</option><option>15</option>
+        <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+      </select>
+
+      <label>วิชาเอก</label>
+      <select name="entry.MAJOR" required>
+        <option value="">เลือกวิชาเอก</option>
+        <option>AD</option><option>AE</option><option>AI</option><option>AN</option>
+        <option>BE</option><option>BM</option><option>CE</option><option>CH</option>
+        <option>CO</option><option>DA</option><option>DE</option><option>DF</option>
+        <option>DM</option><option>DS</option><option>EA</option><option>EE</option>
+        <option>EN1</option><option>EN2</option><option>FC</option><option>FD</option>
+        <option>FE</option><option>FH</option><option>FM</option><option>FR</option>
+        <option>GB</option><option>GH1</option><option>GH2</option><option>GI</option>
+        <option>GM</option><option>HA</option><option>HC</option><option>HS</option>
+        <option>HT</option><option>IM</option><option>IN</option><option>IN1</option><option>IN2</option>
+        <option>JA</option><option>JD</option><option>KO</option><option>LA</option>
+        <option>MA</option><option>MD</option><option>ME</option><option>ME1</option><option>ME2</option>
+        <option>MS</option><option>MU</option><option>PA</option><option>PE</option>
+        <option>PS</option><option>RL</option><option>SA</option><option>SE</option>
+        <option>SG</option><option>SO</option><option>TA</option><option>TC</option><option>TL</option>
+        <option>Tri-LM</option><option>Tri-SC</option><option>VA</option><option>VM</option>
+      </select>
+
+      <button type="submit">ส่งข้อมูล</button>
+    </form>
+
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+  </div>
+
+  <script>
+    const form = document.getElementById('gform');
+    form.action = "https://docs.google.com/forms/d/e/FORM_ID/formResponse"; // replace FORM_ID with real one
+    let submitted = false;
+    form.addEventListener("submit", function(){
+      alert("ส่งข้อมูลเรียบร้อยแล้ว");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
