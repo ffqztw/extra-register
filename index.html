@@ -135,12 +135,6 @@
       const submitBtn = document.getElementById('submitBtn');
       const hiddenFrame = document.getElementById('hidden_iframe');
 
-      // Attach Google entry names
-      for (const [key, entry] of Object.entries(ENTRY)){
-        const el = document.querySelector(`[data-field="${key}"]`);
-        if (el) el.setAttribute('name', entry);
-      }
-
       // Endpoint & tokens
       form.action = GOOGLE_FORM_ACTION;
       form.elements['fvv'].value = '1';
@@ -173,7 +167,7 @@
         for (const v of Object.values(ENTRY)){ if (!/^entry\./.test(v)){ e.preventDefault(); setStatus('ยังไม่ได้ตั้งค่า entry ID ให้ครบทุกข้อ', false); return; } }
 
         submitBtn.disabled = true; setStatus('กำลังส่งข้อมูล...');
-        const once = () => { setStatus('ส่งข้อมูลสำเร็จ! บันทึกลง Google Sheets เรียบร้อย ✅', true); submitBtn.disabled=false; form.reset(); hiddenFrame.removeEventListener('load', once); };
+        const once = () => { setStatus('ส่งข้อมูลสำเร็จ ✅', true); submitBtn.disabled=false; form.reset(); hiddenFrame.removeEventListener('load', once); };
         hiddenFrame.addEventListener('load', once);
       });
     });
@@ -185,7 +179,7 @@
       <div class="logo"><img src="logo.png" alt="เพื่อนรัก(ส์) โปรดักชัน" /></div>
       <div class="title-wrap">
         <h1>EXTRA REGISTER</h1>
-        <p class="subtitle">เพื่อนรัก(ส์) โปรดักชัน • กรอกบนมือถือได้ลื่นเหมือน iOS</p>
+        <p class="subtitle">เพื่อนรัก(ส์) โปรดักชัน</p>
       </div>
     </header>
 
@@ -193,7 +187,9 @@
       <!-- Hidden IFRAME to suppress Google confirmation page -->
       <iframe name="hidden_iframe" id="hidden_iframe" style="display:none"></iframe>
 
-      <form id="gform" method="POST" target="hidden_iframe" action="" novalidate>
+      <form id="gform" method="POST" target="hidden_iframe"
+            action="https://docs.google.com/forms/d/e/1FAIpQLScqdngHLoxqb2fc-XJ7LME18t1-wSgKtrhjePhCZo41zI_Dlw/formResponse"
+            novalidate>
         <input type="hidden" name="fvv" value="1" />
         <input type="hidden" name="fbzx" value="" />
         <input type="hidden" name="pageHistory" value="0" />
@@ -202,7 +198,7 @@
         <div class="group" role="group" aria-labelledby="g-id">
           <div class="row">
             <label id="g-id" for="studentId">รหัสประจำตัว *</label>
-            <input id="studentId" data-field="studentId" type="text" inputmode="numeric" maxlength="6"
+            <input id="studentId" name="entry.1034949448" data-field="studentId" type="text" inputmode="numeric" maxlength="6"
                    placeholder="เช่น 012345" pattern="^0\d{5}$" required
                    title="กรอกรหัส 6 หลัก โดยหลักแรกต้องเป็น 0 (เช่น 012345)">
             <div class="hint">ต้องเริ่มต้นด้วยเลข 0 และมีทั้งหมด 6 หลัก</div>
@@ -214,12 +210,12 @@
           <div class="row pair">
             <div>
               <label for="thFirst">ชื่อจริง (ภาษาไทย) *</label>
-              <input id="thFirst" data-field="thFirst" type="text" required
+              <input id="thFirst" name="entry.2042823635" data-field="thFirst" type="text" required
                      inputmode="text" pattern="^[\u0E00-\u0E7F\s]+$" title="ใช้ตัวอักษรไทยเท่านั้น">
             </div>
             <div>
               <label for="thLast">นามสกุล (ภาษาไทย) *</label>
-              <input id="thLast" data-field="thLast" type="text" required
+              <input id="thLast" name="entry.457423116" data-field="thLast" type="text" required
                      inputmode="text" pattern="^[\u0E00-\u0E7F\s]+$" title="ใช้ตัวอักษรไทยเท่านั้น">
             </div>
           </div>
@@ -230,12 +226,12 @@
           <div class="row pair">
             <div>
               <label for="enFirst">ชื่อจริง (ภาษาอังกฤษ) *</label>
-              <input id="enFirst" data-field="enFirst" type="text" required
+              <input id="enFirst" name="entry.758704396" data-field="enFirst" type="text" required
                      inputmode="text" pattern="^[A-Za-z\s]+$" title="English letters only">
             </div>
             <div>
               <label for="enLast">นามสกุล (ภาษาอังกฤษ) *</label>
-              <input id="enLast" data-field="enLast" type="text" required
+              <input id="enLast" name="entry.506182277" data-field="enLast" type="text" required
                      inputmode="text" pattern="^[A-Za-z\s]+$" title="English letters only">
             </div>
           </div>
@@ -246,12 +242,12 @@
           <div class="row pair">
             <div>
               <label for="nickTh">ชื่อเล่น (ภาษาไทย) *</label>
-              <input id="nickTh" data-field="nickTh" type="text" required
+              <input id="nickTh" name="entry.502055474" data-field="nickTh" type="text" required
                      pattern="^[\u0E00-\u0E7F\s]+$" title="ใช้ตัวอักษรไทยเท่านั้น">
             </div>
             <div>
               <label for="nickEn">ชื่อเล่น (ภาษาอังกฤษ) *</label>
-              <input id="nickEn" data-field="nickEn" type="text" required
+              <input id="nickEn" name="entry.476725428" data-field="nickEn" type="text" required
                      pattern="^[A-Za-z\s]+$" title="English letters only">
             </div>
           </div>
@@ -262,7 +258,7 @@
           <div class="row pair">
             <div class="select-wrap">
               <label for="age">อายุ (ขวบ) *</label>
-              <select id="age" data-field="age" required>
+              <select id="age" name="entry.419484256" data-field="age" required>
                 <option value="" disabled selected>เลือกอายุ</option>
                 <option>12</option><option>13</option><option>14</option><option>15</option>
                 <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
@@ -270,7 +266,7 @@
             </div>
             <div class="select-wrap">
               <label for="major">วิชาเอก *</label>
-              <select id="major" data-field="major" required>
+              <select id="major" name="entry.1294393685" data-field="major" required>
                 <option value="" disabled selected>เลือกวิชาเอก</option>
                 <option>AD</option><option>AE</option><option>AI</option><option>AN</option>
                 <option>BE</option><option>BM</option><option>CE</option><option>CH</option>
@@ -300,7 +296,7 @@
       </form>
     </section>
 
-    <footer>ข้อมูลถูกส่งเข้า Google Sheets ผ่าน Google Form โดยอัตโนมัติ • Theme: Yellow × Black iOS</footer>
+    <footer>ข้อมูลถูกบันทึกเรียบร้อย • Theme: Yellow × Black iOS</footer>
   </div>
 </body>
 </html>
