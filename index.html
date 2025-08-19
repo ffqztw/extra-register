@@ -118,7 +118,7 @@
 
   <script>
     // ====== 1) CONFIG: Google Form endpoint + entry IDs ======
-    const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScqdngHLoxqb2fc-XJ7LME18t1-wSgKtrhjePhCZo41zI_Dlw/formResponse"; // e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
+    const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScqdngHLoxqb2fc-XJ7LME18t1-wSgKtrhjePhCZo41zI_Dlw/formResponse"; // e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
 
     const ENTRY = {
       studentId: "entry.1034949448", // รหัสประจำตัว (ต้องเป็น 0xxxxx)
@@ -145,9 +145,7 @@
 
       // Endpoint & tokens
       form.action = GOOGLE_FORM_ACTION;
-      form.elements['fvv'].value = '1';
-      form.elements['fbzx'].value = Math.random().toString(36).slice(2);
-      form.elements['pageHistory'].value = '0';
+      
 
       // Prefill from query
       for (const [k, field] of Object.entries(URL_KEYS)){
@@ -198,11 +196,7 @@
       <form id="gform" method="POST" target="hidden_iframe"
             action="https://docs.google.com/forms/d/e/1FAIpQLScqdngHLoxqb2fc-XJ7LME18t1-wSgKtrhjePhCZo41zI_Dlw/formResponse"
             novalidate>
-        <input type="hidden" name="fvv" value="1" />
-        <input type="hidden" name="fbzx" value="" />
-        <input type="hidden" name="pageHistory" value="0" />
-
-        <!-- GROUP: Student ID -->
+<!-- GROUP: Student ID -->
         <div class="group" role="group" aria-labelledby="g-id">
           <div class="row">
             <label id="g-id" for="studentId">รหัสประจำตัว *</label>
